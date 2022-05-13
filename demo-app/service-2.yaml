@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-service2
+spec:
+  selector:
+    app: trivial-go-web-app2
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
