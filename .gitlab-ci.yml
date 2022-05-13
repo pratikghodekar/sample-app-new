@@ -1,4 +1,6 @@
-build-job:
-  stage: build
+before_script:
+  - docker info
+
+build_image:
   script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
+    - docker build -t pratikghodekar/sample-webapp:$CI_COMMIT_SHORT_SHA .
