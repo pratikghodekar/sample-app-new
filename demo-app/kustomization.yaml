@@ -3,5 +3,3 @@ kind: Kustomization
 resources:
   - ./deployment.yaml
   - ./service.yaml
-  - ./deployment-2.yaml
-  - ./service-2.yaml
