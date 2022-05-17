@@ -28,7 +28,7 @@ deploy:
         - git config --global user.name "Mirantis DevOps"
 
     script:
-        - ssh -T git@github.com
+        #- ssh -T git@github.com
         - git clone git@github.com:pratikghodekar/argocd-autopilot-app.git
         - cd argocd-autopilot-app
         - >
