@@ -9,7 +9,7 @@ build:
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY  
 
     script:
-        - docker build -t pratikghodekar/sample-webapp:$CI_COMMIT_SHORT_SHA .
+        - docker build --build-arg COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA -t pratikghodekar/sample-webapp:$CI_COMMIT_SHORT_SHA .
         - docker push pratikghodekar/sample-webapp:$CI_COMMIT_SHORT_SHA
         - docker tag pratikghodekar/sample-webapp:$CI_COMMIT_SHORT_SHA pratikghodekar/sample-webapp:latest
         - docker push pratikghodekar/sample-webapp:latest
@@ -32,7 +32,7 @@ deploy:
         - git clone git@github.com:pratikghodekar/argocd-autopilot-app.git
         - cd argocd-autopilot-app
         - >
-           sed -i "s/newTag.*/newTag: $CI_COMMIT_SHORT_SHA/" apps/hello-world/overlays/dev/kustomization.yaml
+           sed -i "s/newTag.*/newTag: \"$CI_COMMIT_SHORT_SHA\"/" apps/hello-world/overlays/dev/kustomization.yaml
         - git add apps/hello-world/overlays/dev/kustomization.yaml
         - git commit -m "updated dev tag to $CI_COMMIT_SHORT_SHA"
         - git remote add github git@github.com:pratikghodekar/argocd-autopilot-app.git

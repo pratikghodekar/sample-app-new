@@ -1,2 +1,3 @@
 FROM nginx:latest
-RUN echo 'This is a sample web v2' > /usr/share/nginx/html/index.html
+ARG COMMIT_SHORT_SHA
+RUN echo "This is a sample web version ${COMMIT_SHORT_SHA}" > /usr/share/nginx/html/index.html
