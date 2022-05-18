@@ -32,8 +32,8 @@ deploy:
         - git clone git@github.com:pratikghodekar/argocd-autopilot-app.git
         - cd argocd-autopilot-app
         - >
-           sed -i "s/newTag.*/newTag: \"${CI_COMMIT_SHORT_SHA}${CI_JOB_ID}\"/" apps/hello-world/overlays/${CI_COMMIT_REF_NAME}/kustomization.yaml
-        - git add apps/hello-world/overlays/${CI_COMMIT_REF_NAME}/kustomization.yaml
+           sed -i "s/newTag.*/newTag: \"${CI_COMMIT_SHORT_SHA}${CI_JOB_ID}\"/" apps/hello-world/overlays/dev/kustomization.yaml
+        - git add apps/hello-world/overlays/dev/kustomization.yaml
         - git commit -m "updated dev tag to $CI_COMMIT_SHORT_SHA"
         - git remote add github git@github.com:pratikghodekar/argocd-autopilot-app.git
         - git push github main
