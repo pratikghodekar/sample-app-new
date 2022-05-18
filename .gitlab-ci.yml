@@ -11,7 +11,7 @@ build:
     script:
         - docker build --build-arg COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}${CI_JOB_ID} -t pratikghodekar/sample-webapp:${CI_COMMIT_SHORT_SHA}${CI_JOB_ID} .
         - docker push pratikghodekar/sample-webapp:${CI_COMMIT_SHORT_SHA}${CI_JOB_ID}
-        - docker tag pratikghodekar/sample-webapp:$CI_COMMIT_SHORT_SHA pratikghodekar/sample-webapp:latest
+        - docker tag pratikghodekar/sample-webapp:${CI_COMMIT_SHORT_SHA}${CI_JOB_ID} pratikghodekar/sample-webapp:latest
         - docker push pratikghodekar/sample-webapp:latest
 
 deploy:
