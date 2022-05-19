@@ -9,6 +9,7 @@ build:
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY  
 
     script:
+        - printenv
         - docker build --build-arg COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID} -t ${CI_DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID} -t ${CI_DOCKER_REGISTRY_IMAGE}:latest .
         - docker push ${CI_DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID}
         - docker push ${CI_DOCKER_REGISTRY_IMAGE}:latest
