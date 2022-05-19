@@ -12,13 +12,11 @@ build:
         - docker build --build-arg COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID} -t ${CI_DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID} -t ${CI_DOCKER_REGISTRY_IMAGE}:latest .
         - docker push ${CI_DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID}
         - docker push ${CI_DOCKER_REGISTRY_IMAGE}:latest
+    except:
+        - merge_requests
     only:
-      refs:
         - dev
         - qa
-    except:
-      refs:
-        - merge_requests
 
 deploy:
     stage: deploy
@@ -41,10 +39,9 @@ deploy:
         - git commit -m "updated dev tag to ${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID}"
         - git remote add github ${CI_ARGOCD_GIT_REPO}
         - git push github main
+    except:
+        - merge_requests
     only:
-      refs:
         - dev
         - qa
-    except:
-      refs:
-        - merge_requests
+    
