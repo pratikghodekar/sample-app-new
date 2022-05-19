@@ -16,6 +16,9 @@ build:
       refs:
         - dev
         - qa
+    except:
+      - merge_requests
+
 deploy:
     stage: deploy
     before_script:
@@ -41,3 +44,5 @@ deploy:
       refs:
         - dev
         - qa
+    except:
+      - merge_requests
