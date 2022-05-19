@@ -14,7 +14,9 @@ build:
         - docker push ${CI_DOCKER_REGISTRY_IMAGE}:latest
     rules:
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-          when: never 
+          when: never
+        - if: $CI_COMMIT_REF_NAME == "dev"
+        - if: $CI_COMMIT_REF_NAME == "qa"
 
 deploy:
     stage: deploy
@@ -40,4 +42,5 @@ deploy:
     rules:
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
           when: never 
-    
+        - if: $CI_COMMIT_REF_NAME == "dev"
+        - if: $CI_COMMIT_REF_NAME == "qa"
