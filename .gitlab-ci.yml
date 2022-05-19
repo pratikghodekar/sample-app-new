@@ -9,31 +9,40 @@ build:
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY  
 
     script:
-        - docker build --build-arg COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}${CI_JOB_ID} -t pratikghodekar/sample-webapp:${CI_COMMIT_SHORT_SHA}${CI_JOB_ID} .
-        - docker push pratikghodekar/sample-webapp:${CI_COMMIT_SHORT_SHA}${CI_JOB_ID}
-        - docker tag pratikghodekar/sample-webapp:${CI_COMMIT_SHORT_SHA}${CI_JOB_ID} pratikghodekar/sample-webapp:latest
-        - docker push pratikghodekar/sample-webapp:latest
+        - printenv
+        - |
+          if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+            tag=""
+            echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+          else
+            tag=":$CI_COMMIT_REF_SLUG"
+            echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+          fi
+        - docker build --pull -t "$CI_REGISTRY_IMAGE${tag}" .
+        - docker push "$CI_REGISTRY_IMAGE${tag}"
+        #- docker build --build-arg COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}${CI_JOB_ID} -t pratikghodekar/sample-webapp:${CI_COMMIT_SHORT_SHA}${CI_JOB_ID} .
+        #- docker push pratikghodekar/sample-webapp:${CI_COMMIT_SHORT_SHA}${CI_JOB_ID}
+        #- docker tag pratikghodekar/sample-webapp:${CI_COMMIT_SHORT_SHA}${CI_JOB_ID} pratikghodekar/sample-webapp:latest
+        #- docker push pratikghodekar/sample-webapp:latest
 
-deploy:
-    stage: deploy
-    before_script:
-        - 'which ssh-agent || ( apt-get update -qy && apt-get install openssh-client -qqy )'
-        - eval `ssh-agent -s`
-        - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null # add ssh ke
-        - mkdir -p ~/.ssh
-        - chmod 700 ~/.ssh
-        #- echo "$SSH_PUBLIC_KEY" >> ~/.ssh/id_rsa.pub
-        - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-        - git config --global user.email "devops@mirantis.com"
-        - git config --global user.name "Mirantis DevOps"
+#deploy:
+#    stage: deploy
+#    before_script:
+#        - 'which ssh-agent || ( apt-get update -qy && apt-get install openssh-client -qqy )'
+#        - eval `ssh-agent -s`
+#        - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null # add ssh ke
+#        - mkdir -p ~/.ssh
+#        - chmod 700 ~/.ssh
+#        - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#        - git config --global user.email "devops@mirantis.com"
+#        - git config --global user.name "Mirantis DevOps"
 
-    script:
-        #- ssh -T git@github.com
-        - git clone git@github.com:pratikghodekar/argocd-autopilot-app.git
-        - cd argocd-autopilot-app
-        - >
-           sed -i "s/newTag.*/newTag: \"${CI_COMMIT_SHORT_SHA}${CI_JOB_ID}\"/" apps/hello-world/overlays/dev/kustomization.yaml
-        - git add apps/hello-world/overlays/dev/kustomization.yaml
-        - git commit -m "updated dev tag to $CI_COMMIT_SHORT_SHA"
-        - git remote add github git@github.com:pratikghodekar/argocd-autopilot-app.git
-        - git push github main
+#    script:
+#        - git clone git@github.com:pratikghodekar/argocd-autopilot-app.git
+#        - cd argocd-autopilot-app
+#        - >
+#           sed -i "s/newTag.*/newTag: \"${CI_COMMIT_SHORT_SHA}${CI_JOB_ID}\"/" apps/hello-world/overlays/dev/kustomization.yaml
+#        - git add apps/hello-world/overlays/dev/kustomization.yaml
+#        - git commit -m "updated dev tag to $CI_COMMIT_SHORT_SHA"
+#        - git remote add github git@github.com:pratikghodekar/argocd-autopilot-app.git
+#        - git push github main
