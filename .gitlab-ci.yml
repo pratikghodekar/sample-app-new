@@ -14,10 +14,8 @@ build:
         - docker push ${CI_DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID}
         - docker push ${CI_DOCKER_REGISTRY_IMAGE}:latest
     rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-          when: never
-        - if: $CI_COMMIT_REF_NAME == "dev"
-        - if: $CI_COMMIT_REF_NAME == "qa"
+        - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "dev"
+        - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "qa"
 
 deploy:
     stage: deploy
@@ -41,7 +39,5 @@ deploy:
         - git remote add github ${CI_ARGOCD_GIT_REPO}
         - git push github main
     rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-          when: never 
-        - if: $CI_COMMIT_REF_NAME == "dev"
-        - if: $CI_COMMIT_REF_NAME == "qa"
+        - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "dev"
+        - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "qa"
