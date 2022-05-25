@@ -35,7 +35,7 @@ deploy:
         - >
            sed -i "s/newTag.*/newTag: \"${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID}\"/" apps/hello-world/overlays/${CI_COMMIT_REF_NAME}/kustomization.yaml
         - git add apps/hello-world/overlays/${CI_COMMIT_REF_NAME}/kustomization.yaml
-        - git commit -m "updated dev tag to ${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID}"
+        - git commit -m "updated ${CI_COMMIT_REF_NAME} tag to ${CI_COMMIT_SHORT_SHA}${CI_PIPELINE_ID}"
         - git remote add github ${CI_ARGOCD_GIT_REPO}
         - git push github main
     rules:
