@@ -16,6 +16,9 @@ build:
     rules:
         - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "dev"
         - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "qa"
+        - if: $CI_COMMIT_REF_NAME == "dev" || $CI_COMMIT_REF_NAME == "qa"
+          when: manual
+          allow_failure: true
 
 deploy:
     stage: deploy
@@ -41,3 +44,6 @@ deploy:
     rules:
         - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "dev"
         - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "qa"
+        - if: $CI_COMMIT_REF_NAME == "dev" || $CI_COMMIT_REF_NAME == "qa"
+          when: manual
+          allow_failure: true
