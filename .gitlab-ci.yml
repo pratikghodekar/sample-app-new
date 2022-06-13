@@ -48,7 +48,7 @@ build:
 
 deploy:
     stage: deploy
-    image: gitlab-runner:latest
+    image: gitlab/gitlab-runner:latest
 
     tags:
         - mirantis-build
