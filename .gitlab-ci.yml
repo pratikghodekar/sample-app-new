@@ -31,7 +31,7 @@ build:
         TRIVY_NO_PROGRESS: "true"
         TRIVY_CACHE_DIR: ".trivycache/"
     
-    allow_failure: true
+    allow_failure: false
     
     tags:
         - mirantis-build
@@ -59,6 +59,9 @@ build:
     cache:
       paths:
         - .trivycache/
+    artifacts:
+      reports:
+        container_scanning: gl-container-scanning-report.json
     rules:
         - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "dev"
         - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "qa"
