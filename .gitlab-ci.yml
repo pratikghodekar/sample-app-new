@@ -55,7 +55,6 @@ deploy:
         - linux
 
     before_script:
-        - 
         - 'which ssh-agent || ( apt-get update -qy && apt-get install openssh-client -qqy )'
         - eval `ssh-agent -s`
         - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null # add ssh ke
